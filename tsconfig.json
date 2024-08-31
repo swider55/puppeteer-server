@@ -11,7 +11,8 @@
       "baseUrl": ".",
       "paths": {
         "@routes/*": ["src/routes/*"],
-        "@utils/*": ["src/utils/*"]
+        "@utils/*": ["src/utils/*"],
+        "@managers/*": ["src/managers/*"]
       }
     },
     "include": ["src/**/*"],

@@ -10,7 +10,8 @@
   "type": "commonjs",
   "devDependencies": {
     "@types/express": "^4.17.21",
-    "tsc-alias": "^1.8.10"  
+    "prettier": "3.3.3",
+    "tsc-alias": "^1.8.10"
   },
   "scripts": {
     "build": "tsc --build && tsc-alias",
