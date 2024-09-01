@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { getPage } from "@managers/browser-manager";
-import { generatePdf, getLastSavedPdf } from "@utils/pdf-utils";
+import { generatePdf } from "@utils/pdf-utils";
 
 const router = Router();
 
@@ -13,9 +13,8 @@ router.get("/", async (req, res) => {
 
     const html = await page.content();
     await generatePdf(page, pageId);
-    const lastSavedPdf = getLastSavedPdf();
 
-    return res.send({ html, lastSavedPdf });
+    return res.send({ html });
   } catch (error) {
     const response = "Error while getting content. ";
     console.error(response + error);

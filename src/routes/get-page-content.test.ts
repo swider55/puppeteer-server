@@ -1,7 +1,7 @@
 import request from "supertest";
 import app from "@src/app";
 import { getPage } from "@managers/browser-manager";
-import { generatePdf, getLastSavedPdf } from "@utils/pdf-utils";
+import { generatePdf } from "@utils/pdf-utils";
 
 jest.mock("@managers/browser-manager", () => ({
   getPage: jest.fn(),
@@ -9,7 +9,6 @@ jest.mock("@managers/browser-manager", () => ({
 
 jest.mock("@utils/pdf-utils", () => ({
   generatePdf: jest.fn(),
-  getLastSavedPdf: jest.fn(),
 }));
 
 describe("GET /get-page-content", () => {
@@ -35,15 +34,12 @@ describe("GET /get-page-content", () => {
     expect(response.text).toBe("Page not found");
   });
 
-  it("should return html content and the last saved PDF path", async () => {
+  it("should return html content", async () => {
     const mockPage = {
       content: jest.fn().mockResolvedValue("<html>Test Content</html>"),
     };
     (getPage as jest.Mock).mockReturnValue(mockPage);
     (generatePdf as jest.Mock).mockResolvedValue(undefined);
-    (getLastSavedPdf as jest.Mock).mockReturnValue(
-      "/path/to/last-saved-pdf.pdf",
-    );
 
     const response = await request(app)
       .get("/get-page-content")
@@ -51,11 +47,9 @@ describe("GET /get-page-content", () => {
 
     expect(response.status).toBe(200);
     expect(response.body.html).toBe("<html>Test Content</html>");
-    expect(response.body.lastSavedPdf).toBe("/path/to/last-saved-pdf.pdf");
 
     expect(mockPage.content).toHaveBeenCalled();
     expect(generatePdf).toHaveBeenCalledWith(mockPage, "valid-id");
-    expect(getLastSavedPdf).toHaveBeenCalled();
   });
 
   it("should return 500 if an error occurs", async () => {

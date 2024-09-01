@@ -1,7 +1,7 @@
 import request from "supertest";
 import app from "@src/app";
 import { getPage } from "@managers/browser-manager";
-import { generatePdf, deleteLastPdf } from "@utils/pdf-utils";
+import { generatePdf, deletePdf } from "@utils/pdf-utils";
 
 jest.mock("@managers/browser-manager", () => ({
   getPage: jest.fn(),
@@ -9,10 +9,10 @@ jest.mock("@managers/browser-manager", () => ({
 
 jest.mock("@utils/pdf-utils", () => ({
   generatePdf: jest.fn(),
-  deleteLastPdf: jest.fn(),
+  deletePdf: jest.fn(),
 }));
 
-describe("POST /go-back-in-tab", () => {
+describe("POST /go-back-in-page", () => {
   let consoleErrorSpy: jest.SpyInstance;
 
   beforeEach(() => {
@@ -28,7 +28,7 @@ describe("POST /go-back-in-tab", () => {
     (getPage as jest.Mock).mockReturnValue(null);
 
     const response = await request(app)
-      .post("/go-back-in-tab")
+      .post("/go-back-in-page")
       .send({ pageId: "non-existing-id" });
 
     expect(response.status).toBe(400);
@@ -43,14 +43,14 @@ describe("POST /go-back-in-tab", () => {
     (getPage as jest.Mock).mockReturnValue(pageMock);
 
     const response = await request(app)
-      .post("/go-back-in-tab")
+      .post("/go-back-in-page")
       .send({ pageId: "existing-id" });
 
     expect(response.status).toBe(200);
     expect(response.text).toBe("Go back clicked");
 
     expect(getPage).toHaveBeenCalledWith("existing-id");
-    expect(deleteLastPdf).toHaveBeenCalled();
+    expect(deletePdf).toHaveBeenCalled();
     expect(generatePdf).toHaveBeenCalledWith(pageMock, "existing-id");
     expect(pageMock.goBack).toHaveBeenCalled();
   });
@@ -61,7 +61,7 @@ describe("POST /go-back-in-tab", () => {
     });
 
     const response = await request(app)
-      .post("/go-back-in-tab")
+      .post("/go-back-in-page")
       .send({ pageId: "existing-id" });
 
     expect(response.status).toBe(500);

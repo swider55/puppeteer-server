@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { getPage } from "@managers/browser-manager";
-import { generatePdf, deleteLastPdf } from "@utils/pdf-utils";
+import { generatePdf, deletePdf } from "@utils/pdf-utils";
 
 const router = Router();
 
@@ -11,7 +11,7 @@ router.post("/", async (req, res) => {
 
     if (!page) return res.status(400).send("Page not found");
 
-    deleteLastPdf();
+    deletePdf(pageId);
     await generatePdf(page, pageId);
 
     if (optional) {

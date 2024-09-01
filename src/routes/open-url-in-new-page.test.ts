@@ -1,10 +1,10 @@
 import request from "supertest";
 import app from "@src/app";
 
-describe("POST /open-url-in-new-tab", () => {
+describe("POST /open-url-in-new-page", () => {
   it("should return 400 if the browser is not started", async () => {
     const response = await request(app)
-      .post("/open-url-in-new-tab")
+      .post("/open-url-in-new-page")
       .send({ url: "http://example.com" });
 
     expect(response.status).toBe(400);
@@ -26,7 +26,7 @@ describe("POST /open-url-in-new-tab", () => {
     );
 
     const response = await request(app)
-      .post("/open-url-in-new-tab")
+      .post("/open-url-in-new-page")
       .send({ url: "http://example.com" });
 
     expect(response.status).toBe(200);

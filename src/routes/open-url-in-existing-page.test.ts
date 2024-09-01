@@ -1,7 +1,7 @@
 import request from "supertest";
 import app from "@src/app";
 import { getPage } from "@managers/browser-manager";
-import { generatePdf, deleteLastPdf } from "@utils/pdf-utils";
+import { generatePdf, deletePdf } from "@utils/pdf-utils";
 
 jest.mock("@managers/browser-manager", () => ({
   getPage: jest.fn(),
@@ -9,7 +9,7 @@ jest.mock("@managers/browser-manager", () => ({
 
 jest.mock("@utils/pdf-utils", () => ({
   generatePdf: jest.fn(),
-  deleteLastPdf: jest.fn(),
+  deletePdf: jest.fn(),
 }));
 
 describe("POST /your-endpoint-path", () => {
@@ -47,7 +47,7 @@ describe("POST /your-endpoint-path", () => {
       .post("/open-url-in-existing-page")
       .send({ pageId: "validPageId", url: "http://example.com" });
 
-    expect(deleteLastPdf).toHaveBeenCalled();
+    expect(deletePdf).toHaveBeenCalled();
     expect(generatePdf).toHaveBeenCalledWith(mockPage, "validPageId");
     expect(mockPage.goto).toHaveBeenCalledWith("http://example.com");
     expect(response.status).toBe(200);

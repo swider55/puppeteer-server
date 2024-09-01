@@ -1,10 +1,10 @@
 import request from "supertest";
 import app from "@src/app";
-import { getPage } from "@managers/browser-manager";
+import { getPage, deletePage } from "@managers/browser-manager";
 
 jest.mock("@managers/browser-manager");
 
-describe("POST /close-page", () => {
+describe("delete /close-page", () => {
   let consoleErrorSpy: jest.SpyInstance;
 
   beforeEach(() => {
@@ -20,11 +20,12 @@ describe("POST /close-page", () => {
     (getPage as jest.Mock).mockReturnValueOnce(null);
 
     const response = await request(app)
-      .post("/close-page")
+      .delete("/close-page")
       .send({ pageId: "non-existing-page-id" });
 
     expect(response.status).toBe(400);
     expect(response.text).toBe("Page not found");
+    expect(deletePage).not.toHaveBeenCalled();
   });
 
   it('should close the page and return "Page closed"', async () => {
@@ -32,7 +33,7 @@ describe("POST /close-page", () => {
     (getPage as jest.Mock).mockReturnValueOnce({ close: closeMock });
 
     const response = await request(app)
-      .post("/close-page")
+      .delete("/close-page")
       .send({ pageId: "existing-page-id" });
 
     expect(response.status).toBe(200);
@@ -45,11 +46,12 @@ describe("POST /close-page", () => {
     (getPage as jest.Mock).mockReturnValueOnce({ close: closeMock });
 
     const response = await request(app)
-      .post("/close-page")
+      .delete("/close-page")
       .send({ pageId: "existing-page-id" });
 
     expect(response.status).toBe(500);
     expect(response.text).toContain("Error while closing the tab");
     expect(consoleErrorSpy).toHaveBeenCalled();
+    expect(deletePage).not.toHaveBeenCalled();
   });
 });

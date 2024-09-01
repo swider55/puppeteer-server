@@ -1,12 +1,12 @@
 import request from "supertest";
 import app from "@src/app";
 import { getPage } from "@managers/browser-manager";
-import { generatePdf, deleteLastPdf } from "@utils/pdf-utils";
+import { deletePdf, generatePdf } from "@utils/pdf-utils";
 
 jest.mock("@managers/browser-manager");
 jest.mock("@utils/pdf-utils");
 
-describe("POST /click-element", () => {
+describe("POST /click-element-in-page", () => {
   const mockPage = {
     click: jest.fn(),
     waitForNavigation: jest.fn().mockResolvedValue(null),
@@ -27,7 +27,7 @@ describe("POST /click-element", () => {
     (getPage as jest.Mock).mockReturnValue(null);
 
     const response = await request(app)
-      .post("/click-element")
+      .post("/click-element-in-page")
       .send({ pageId: "non-existent-id", selector: "#button" });
 
     expect(response.status).toBe(400);
@@ -38,10 +38,10 @@ describe("POST /click-element", () => {
     (getPage as jest.Mock).mockReturnValue(mockPage);
 
     const response = await request(app)
-      .post("/click-element")
+      .post("/click-element-in-page")
       .send({ pageId: "page-id", selector: "#button" });
 
-    expect(deleteLastPdf).toHaveBeenCalled();
+    expect(deletePdf).toHaveBeenCalled();
     expect(generatePdf).toHaveBeenCalledWith(mockPage, "page-id");
     expect(mockPage.click).toHaveBeenCalledWith("#button");
     expect(mockPage.waitForNavigation).toHaveBeenCalledWith({
@@ -55,10 +55,10 @@ describe("POST /click-element", () => {
     (getPage as jest.Mock).mockReturnValue(mockPage);
 
     const response = await request(app)
-      .post("/click-element")
+      .post("/click-element-in-page")
       .send({ pageId: "page-id", selector: "#button", optional: true });
 
-    expect(deleteLastPdf).toHaveBeenCalled();
+    expect(deletePdf).toHaveBeenCalled();
     expect(generatePdf).toHaveBeenCalledWith(mockPage, "page-id");
     expect(mockPage.click).toHaveBeenCalledWith("#button");
     expect(mockPage.waitForNavigation).not.toHaveBeenCalled();
@@ -71,10 +71,10 @@ describe("POST /click-element", () => {
     mockPage.click.mockRejectedValueOnce(new Error("Click failed"));
 
     const response = await request(app)
-      .post("/click-element")
+      .post("/click-element-in-page")
       .send({ pageId: "page-id", selector: "#button", optional: true });
 
-    expect(deleteLastPdf).toHaveBeenCalled();
+    expect(deletePdf).toHaveBeenCalled();
     expect(generatePdf).toHaveBeenCalledWith(mockPage, "page-id");
     expect(mockPage.click).toHaveBeenCalledWith("#button");
     expect(response.status).toBe(200);
@@ -86,7 +86,7 @@ describe("POST /click-element", () => {
     mockPage.click.mockRejectedValueOnce(new Error("Unexpected error"));
 
     const response = await request(app)
-      .post("/click-element")
+      .post("/click-element-in-page")
       .send({ pageId: "page-id", selector: "#button" });
 
     expect(response.status).toBe(500);

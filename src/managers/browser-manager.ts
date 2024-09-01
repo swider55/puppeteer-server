@@ -29,3 +29,7 @@ export function setNewPage(id: string, page: Page): void {
 export function getPage(id: string): Page {
   return _pages[id];
 }
+
+export function deletePage(id: string): void {
+  delete _pages[id];
+}

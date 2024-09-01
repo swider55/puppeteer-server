@@ -3,7 +3,7 @@ import { getPage } from "@managers/browser-manager";
 
 const router = Router();
 
-router.post("/", async (req, res) => {
+router.delete("/", async (req, res) => {
   try {
     const pageId = req.body.pageId;
     const page = getPage(pageId);

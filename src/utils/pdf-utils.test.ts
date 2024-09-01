@@ -1,10 +1,4 @@
-import {
-  generatePdf,
-  deletePdf,
-  deleteLastPdf,
-  getLastSavedPdf,
-  updateLastPdf,
-} from "@utils/pdf-utils";
+import { generatePdf, deletePdf } from "@utils/pdf-utils";
 import fs from "fs";
 import path from "path";
 import { Page } from "puppeteer";
@@ -25,7 +19,7 @@ describe("pdf-utils", () => {
   });
 
   describe("generatePdf", () => {
-    it("should generate a PDF and set _lastSavedPdf", async () => {
+    it("should generate a PDF", async () => {
       const mockPage = {
         pdf: jest.fn(),
       } as unknown as Page;
@@ -39,78 +33,43 @@ describe("pdf-utils", () => {
       await generatePdf(mockPage, pdfName);
 
       expect(mockPage.pdf).toHaveBeenCalledWith({ path: expectedPdfPath });
-      expect(getLastSavedPdf()).toBe(expectedPdfPath);
-    });
-  });
-
-  describe("deletePdf", () => {
-    it("should delete the PDF file if it exists", () => {
-      const pdfPath = "/some/path/to/pdf.pdf";
-      (fs.existsSync as jest.Mock).mockReturnValue(true);
-      (fs.unlinkSync as jest.Mock).mockReturnValue(undefined);
-
-      deletePdf(pdfPath);
-
-      expect(fs.existsSync).toHaveBeenCalledWith(pdfPath);
-      expect(fs.unlinkSync).toHaveBeenCalledWith(pdfPath);
-      expect(consoleLogSpy).toHaveBeenCalled();
     });
 
-    it("should log a message if the PDF file does not exist", () => {
-      const pdfPath = "/some/path/to/nonexistent.pdf";
-      (fs.existsSync as jest.Mock).mockReturnValue(false);
+    describe("deletePdf", () => {
+      it("should delete the PDF file if it exists", () => {
+        const pdfName = "pdf";
+        const pdfDirectory = "./pdf/";
+        const expectedPdfPath = path.join(pdfDirectory, `${pdfName}.pdf`);
 
-      const consoleSpy = jest
-        .spyOn(console, "log")
-        .mockImplementation(() => {});
+        (fs.existsSync as jest.Mock).mockReturnValue(true);
+        (fs.unlinkSync as jest.Mock).mockReturnValue(undefined);
 
-      deletePdf(pdfPath);
+        deletePdf(pdfName);
 
-      expect(fs.existsSync).toHaveBeenCalledWith(pdfPath);
-      expect(consoleSpy).toHaveBeenCalledWith(`PDF not found: ${pdfPath}`);
-      expect(consoleLogSpy).toHaveBeenCalled();
-    });
-  });
+        expect(fs.existsSync).toHaveBeenCalledWith(expectedPdfPath);
+        expect(fs.unlinkSync).toHaveBeenCalledWith(expectedPdfPath);
+        expect(consoleLogSpy).toHaveBeenCalled();
+      });
 
-  describe("deleteLastPdf", () => {
-    it("should delete the last saved PDF if it exists", () => {
-      const lastPdfPath = "/some/path/to/lastPdf.pdf";
-      updateLastPdf(lastPdfPath);
+      it("should log a message if the PDF file does not exist", () => {
+        const pdfName = "nonexistent";
+        const pdfDirectory = "./pdf/";
+        const expectedPdfPath = path.join(pdfDirectory, `${pdfName}.pdf`);
 
-      (fs.existsSync as jest.Mock).mockReturnValue(true);
-      (fs.unlinkSync as jest.Mock).mockReturnValue(undefined);
+        (fs.existsSync as jest.Mock).mockReturnValue(false);
 
-      deleteLastPdf();
+        const consoleSpy = jest
+          .spyOn(console, "log")
+          .mockImplementation(() => {});
 
-      expect(fs.existsSync).toHaveBeenCalledWith(lastPdfPath);
-      expect(fs.unlinkSync).toHaveBeenCalledWith(lastPdfPath);
-    });
+        deletePdf(pdfName);
 
-    it("should not attempt to delete a PDF if _lastSavedPdf is null", () => {
-      updateLastPdf(null as unknown as string); // Simulate null state
-
-      deleteLastPdf();
-
-      expect(fs.existsSync).not.toHaveBeenCalled();
-      expect(fs.unlinkSync).not.toHaveBeenCalled();
-    });
-  });
-
-  describe("getLastSavedPdf", () => {
-    it("should return the last saved PDF path", () => {
-      const lastPdfPath = "/some/path/to/lastPdf.pdf";
-      updateLastPdf(lastPdfPath);
-
-      expect(getLastSavedPdf()).toBe(lastPdfPath);
-    });
-  });
-
-  describe("updateLastPdf", () => {
-    it("should update _lastSavedPdf", () => {
-      const newPdfPath = "/new/path/to/pdf.pdf";
-      updateLastPdf(newPdfPath);
-
-      expect(getLastSavedPdf()).toBe(newPdfPath);
+        expect(fs.existsSync).toHaveBeenCalledWith(expectedPdfPath);
+        expect(consoleSpy).toHaveBeenCalledWith(
+          `PDF not found: ${expectedPdfPath}`,
+        );
+        expect(consoleLogSpy).toHaveBeenCalled();
+      });
     });
   });
 });
