@@ -8,7 +8,7 @@ router.delete("/", async (req, res) => {
     const browser = getBrowser();
     if (!browser) return res.status(400).send("No browser run");
 
-    browser?.close;
+    browser.close();
     return res.send("Browser closed");
   } catch (error) {
     const response = "Error while closing the browser. ";

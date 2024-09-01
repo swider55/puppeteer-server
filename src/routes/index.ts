@@ -12,11 +12,11 @@ const router = Router();
 
 router.use("/start-browser", startBrowser);
 router.use("/open-url-in-new-tab", openUrlInNewPage);
-router.use("/go-to-page-in-existing-tab", openUrlInExistingPage);
+router.use("/open-url-in-existing-page", openUrlInExistingPage);
 router.use("/get-page-content", getPageContent);
 router.use("/click-element", clickElementInPage);
 router.use("/close-browser", closeBrowser);
-router.use("/close-tab", closePage);
+router.use("/close-page", closePage);
 router.use("/go-back-in-tab", goBackInPage);
 
 export default router;

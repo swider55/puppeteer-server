@@ -17,7 +17,7 @@ router.post("/", async (req, res) => {
     if (optional) {
       try {
         await page.click(selector);
-      } catch (clickError) {
+      } catch (error) {
         console.debug(`Click on ${selector} failed, but it is optional`);
       }
     } else {

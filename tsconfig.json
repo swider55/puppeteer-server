@@ -12,7 +12,8 @@
       "paths": {
         "@routes/*": ["src/routes/*"],
         "@utils/*": ["src/utils/*"],
-        "@managers/*": ["src/managers/*"]
+        "@managers/*": ["src/managers/*"],
+        "@src/*": ["src/*"]
       }
     },
     "include": ["src/**/*"],
