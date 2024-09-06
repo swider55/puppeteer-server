@@ -7,6 +7,7 @@ import clickElementInPage from "@routes/click-element-in-page";
 import closeBrowser from "@routes/close-browser";
 import closePage from "@routes/close-page";
 import goBackInPage from "@routes/go-back-in-page";
+import typeInPage from "@routes/type-in-page";
 
 const router = Router();
 
@@ -18,5 +19,6 @@ router.use("/click-element-in-page", clickElementInPage);
 router.use("/close-browser", closeBrowser);
 router.use("/close-page", closePage);
 router.use("/go-back-in-page", goBackInPage);
+router.use("/type-in-page", typeInPage);
 
 export default router;

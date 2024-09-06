@@ -187,7 +187,27 @@ This action navigates back to the previous page in a given tab. Before going bac
 
 Returns string 'Go back clicked'
 
+### 9. Type in text
+**Endpoint**: `/type-in-page`  
+**Method**: `PUT`
 
+This action takes a string from the request and places it in a specified element on a given tab
+
+**Request Body**:
+```json
+{
+  "pageId": 123, 
+  "text": "some text",
+  "selector": "#button" 
+}
+```
+
+**Response**:
+
+Returns string 'Text entered'
+
+## Troubleshooting
+ -if you have problem with failing tests, please first delete `/dist`
 
 
 
