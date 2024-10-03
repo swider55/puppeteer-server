@@ -9,6 +9,7 @@ router.post("/", async (req, res) => {
     const pageId = req.body.pageId;
     const page = getPage(pageId);
 
+    console.log('type-in-page, pageId=' + pageId);
     if (!page) return res.status(400).send("Page not found");
 
     deletePdf(pageId);

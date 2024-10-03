@@ -9,6 +9,7 @@ router.post("/", async (req, res) => {
     const { pageId, url } = req.body;
     const page = getPage(pageId);
 
+    console.log('open-url-in-existing-page, pageId=' + pageId);
     if (!page) return res.status(400).send("Page not found");
 
     deletePdf(pageId);

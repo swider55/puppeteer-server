@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 
 export async function generatePdf(page: Page, pdfName: string): Promise<void> {
-  const pdfDirectory = process.env.PDF_DIRECTORY || "./pdf/";
+  const pdfDirectory = process.env.PDF_PATH || "./pdf/";
   const pdfPath = path.join(pdfDirectory, `${pdfName}.pdf`);
 
   if (!fs.existsSync(pdfDirectory)) {
@@ -14,11 +14,11 @@ export async function generatePdf(page: Page, pdfName: string): Promise<void> {
 }
 
 export function deletePdf(pdfName: string): void {
-  const pdfDirectory = process.env.PDF_DIRECTORY || ".pdfName/pdf/";
+  const pdfDirectory = process.env.PDF_PATH || "/pdf/";
   const pdfPath = path.join(pdfDirectory, `${pdfName}.pdf`);
   if (fs.existsSync(pdfPath)) {
     fs.unlinkSync(pdfPath);
-    console.log(`Deleted PDF: ${pdfPath}`);
+    console.log(`Delete PDF: ${pdfPath}`);
   } else {
     console.log(`PDF not found: ${pdfPath}`);
   }

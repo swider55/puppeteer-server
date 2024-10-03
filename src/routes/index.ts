@@ -1,5 +1,6 @@
 import { Router } from "express";
 import startBrowser from "@routes/start-browser";
+import startBrowserIfNotUsed from "@routes/start-browser-if-not-used";
 import openUrlInNewPage from "@routes/open-url-in-new-page";
 import openUrlInExistingPage from "@routes/open-url-in-existing-page";
 import getPageContent from "@routes/get-page-content";
@@ -12,6 +13,7 @@ import typeInPage from "@routes/type-in-page";
 const router = Router();
 
 router.use("/start-browser", startBrowser);
+router.use("/start-browser-if-not-used", startBrowserIfNotUsed);
 router.use("/open-url-in-new-page", openUrlInNewPage);
 router.use("/open-url-in-existing-page", openUrlInExistingPage);
 router.use("/get-page-content", getPageContent);

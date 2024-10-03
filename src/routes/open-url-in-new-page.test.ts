@@ -1,5 +1,10 @@
 import request from "supertest";
 import app from "@src/app";
+import { generatePdf } from "@utils/pdf-utils";
+
+jest.mock("@utils/pdf-utils", () => ({
+  generatePdf: jest.fn(),
+}));
 
 describe("POST /open-url-in-new-page", () => {
   it("should return 400 if the browser is not started", async () => {
@@ -17,6 +22,9 @@ describe("POST /open-url-in-new-page", () => {
         goto: jest.fn().mockResolvedValue(null),
       }),
     };
+
+    (generatePdf as jest.Mock).mockResolvedValueOnce(undefined);
+    
     jest
       .spyOn(require("@managers/browser-manager"), "getBrowser")
       .mockReturnValue(browserMock);

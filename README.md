@@ -206,6 +206,22 @@ This action takes a string from the request and places it in a specified element
 
 Returns string 'Text entered'
 
+### 10. Start Browser if Not Already Used
+
+**Endpoint**: `/start-browser-if-not-used`  
+**Method**: `GET`
+
+This action checks if the Puppeteer browser is already in use. If it is, it returns a 423 status with the message "Browser is already used". If the browser is not in use, it starts a new instance of the browser.
+
+**Response**:
+
+- If the browser is already in use:
+  - Status: `423`
+  - Body: `"Browser is already used"`
+  
+- If the browser is started successfully:
+  - Status: `200`
+  - Body: `"Browser started"`
 ## Troubleshooting
  -if you have problem with failing tests, please first delete `/dist`
 

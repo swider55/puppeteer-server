@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { generateRandomId } from "@utils/uuid-utils";
 import { getBrowser, setNewPage } from "@managers/browser-manager";
+import { generatePdf } from "@utils/pdf-utils";
 
 const router = Router();
 
@@ -10,6 +11,7 @@ router.post("/", async (req, res) => {
     const pageId = generateRandomId();
     const browser = getBrowser();
 
+    console.log('open-url-in-new-page');
     if (!browser) return res.status(400).send("Browser not started");
 
     const page = await browser.newPage();
@@ -17,6 +19,7 @@ router.post("/", async (req, res) => {
     await page.goto(url);
 
     setNewPage(pageId, page);
+    await generatePdf(page, pageId);
 
     return res.send({ pageId: pageId });
   } catch (error) {

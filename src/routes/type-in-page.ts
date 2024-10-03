@@ -8,6 +8,7 @@ router.put("/", async (req, res) => {
     const { pageId, text, selector } = req.body;
     const page = getPage(pageId);
 
+    console.log('go-back-in-page, pageId=' + pageId);
     if (!page) return res.status(400).send("Page not found");
 
     await page.type(selector, text, {delay: 100})

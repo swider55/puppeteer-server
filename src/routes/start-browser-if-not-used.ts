@@ -1,11 +1,16 @@
 import { Router } from "express";
-import { startBrowser } from "@managers/browser-manager";
+import { startBrowser, getBrowser } from "@managers/browser-manager";
 
 const router = Router();
 
 router.get("/", async (req, res) => {
   try {
-    console.log('Opening browser')
+    console.log('Checking if the browser has already been used');
+    if (getBrowser()) {
+      const response = "Browser is already used";
+      console.log(response);
+      return res.status(423).send(response);
+    }
     await startBrowser();
     
     res.send("Browser started");

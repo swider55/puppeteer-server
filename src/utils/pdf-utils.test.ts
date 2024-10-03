@@ -28,7 +28,7 @@ describe("pdf-utils", () => {
       const pdfDirectory = "./pdf/";
       const expectedPdfPath = path.join(pdfDirectory, `${pdfName}.pdf`);
 
-      process.env.PDF_DIRECTORY = pdfDirectory;
+      process.env.PDF_PATH = pdfDirectory;
 
       await generatePdf(mockPage, pdfName);
 

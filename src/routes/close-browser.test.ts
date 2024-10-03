@@ -1,9 +1,10 @@
 import request from "supertest";
 import app from "@src/app";
-import { getBrowser } from "@managers/browser-manager";
+import { getBrowser, closeBrowser } from "@managers/browser-manager";
 
 jest.mock("@managers/browser-manager", () => ({
   getBrowser: jest.fn(),
+  closeBrowser: jest.fn(),
 }));
 
 describe("DELETE /close-browser", () => {
@@ -28,28 +29,27 @@ describe("DELETE /close-browser", () => {
   });
 
   it("should close the browser and return a success message", async () => {
-    const closeMock = jest.fn();
-    const browserMock = { close: closeMock };
-    (getBrowser as jest.Mock).mockReturnValue(browserMock);
+    (getBrowser as jest.Mock).mockReturnValue({});
 
     const response = await request(app).delete("/close-browser").send();
 
     expect(response.status).toBe(200);
     expect(response.text).toBe("Browser closed");
-    expect(closeMock).toHaveBeenCalled();
+    expect(closeBrowser).toHaveBeenCalled(); 
   });
 
   it("should return 500 if an error occurs while closing the browser", async () => {
-    const closeMock = jest.fn().mockImplementation(() => {
-      throw new Error("Test Error");
+    (getBrowser as jest.Mock).mockReturnValue({});
+
+    (closeBrowser as jest.Mock).mockImplementation(() => {
+      throw new Error("Mocked closeBrowser error");
     });
-    const browserMock = { close: closeMock };
-    (getBrowser as jest.Mock).mockReturnValue(browserMock);
-
+  
     const response = await request(app).delete("/close-browser").send();
-
+  
     expect(response.status).toBe(500);
-    expect(response.text).toBe("Error while closing the browser. ");
-    expect(consoleErrorSpy).toHaveBeenCalled();
+    expect(response.text).toContain("Error while closing the browser.");
+    expect(consoleErrorSpy).toHaveBeenCalledWith(expect.stringContaining("Mocked closeBrowser error"));
+
   });
 });
