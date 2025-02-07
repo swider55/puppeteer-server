@@ -18,7 +18,7 @@ npm run build-and-start
 ## Environment Variables
 The behavior of the server can be configured using environment variables defined in the .env file.
  - PORT: The port on which the server will listen (default: 3000).
- - ALLOWED_IPS: A comma-separated list of IPs that are allowed to access the server (default: ::1,::ffff:127.0.0.1).
+ - ALLOWED_IPS: A comma-separated list of IPs that are allowed to access the server (default: ::1,::ffff:127.0.0.1). No ALLOWED_IPS means that all IPs are allowed
  - PUPPETEER_HEADLESS: Determines if Puppeteer runs in headless mode (true or false, default: false).
  - PDF_PATH: The path where generated PDFs will be saved (default: ./pdf/).
 
@@ -40,6 +40,16 @@ npm test
 To format the codebase using Prettier, run the following command:
 ```bash
 npx prettier src --write
+```
+
+## Docker
+In order to create an image and based on it run container, first uncomment settings in `browser-manager.ts`, and run
+```
+docker build -t <image-name> .
+// if tou have arm 
+// docker build --platform linux/amd64 -t <image-name> .
+
+docker run -d -p 3000:3000 -v .:/usr/src/app/pdf <image-name>
 ```
 
 ## Available Actions

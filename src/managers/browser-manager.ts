@@ -5,8 +5,14 @@ const _pages: { [key: string]: Page } = {};
 
 export async function startBrowser(): Promise<Browser> {
   if (!_browser) {
-    const headless = process.env.PUPPETEER_HEADLESS === "true";
-    _browser = await puppeteer.launch({ headless });
+    const ifHeadless = process.env.PUPPETEER_HEADLESS === "true";
+    _browser = await puppeteer.launch({ 
+      headless: ifHeadless,
+      // uncomment below settings if using Docker
+      // defaultViewport: null,
+      // executablePath: '/usr/bin/google-chrome',
+      // args: ['--no-sandbox'],
+    });
   }
   return _browser;
 }
