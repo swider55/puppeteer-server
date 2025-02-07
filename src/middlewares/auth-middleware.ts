@@ -9,7 +9,7 @@ export const authMiddleware = (
 ) => {
   const clientIp = req.ip;
 
-  if (clientIp !== undefined && allowedIps.includes(clientIp)) {
+  if (allowedIps.length === 0 || clientIp !== undefined && allowedIps.includes(clientIp)) {
     next();
   } else {
     res.status(403).send("Access denied");
